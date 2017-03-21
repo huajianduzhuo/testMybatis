@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.mybatis.test.ProductMapper">
+	<!-- 根据id查询商品 -->
+	<!-- resultType:指定sql输出结果所映射的java类型，select指定resultType表示将单条结果映射成的java对象 -->
+	<!-- 占位符用 #{} 表示，其中的id表示输入的参数名称，如果输入参数是简单类型，#{}中的参数名称可以任意 -->
+	<select id="getProductById" parameterType="int" resultType="pojo.Product">
+		SELECT * FROM PRODUCT WHERE ID = #{id}
+	</select>
+	
+	<!-- 根据商品名称模糊查询商品，可能返回多条数据
+	resultType：指定的是单条记录所返回的java对象类型
+	${}：表示拼接的sql串，将接收的参数内容不加任何修饰拼接在sql中
+	使用${}拼接sql缺点：容易引起sql注入
+	${value}：接收输入参数内容，如果输入参数类型是简单类型，${}中只能使用value -->
+	<select id="getProductByName" parameterType="java.lang.String" resultType="pojo.Product">
+		SELECT * FROM PRODUCT WHERE NAME LIKE '%${value}%'
+	</select>
+	
+	<!-- 添加商品
+	parameterType：指定输入参数类型是pojo（包括商品信息）
+	#{}中指定pojo的属性名，接收到pojo对象的属性值，mybatis通过OGNL获取对象的属性值 -->
+	<insert id="addProduct" parameterType="pojo.Product">
+		INSERT INTO PRODUCT(NAME,DESCRIPTION,PRICE,PRODUCTION_DATE,CAT_ID) VALUES(#{name},#{description},#{price},#{production_date},#{cat_id})
+	</insert>
+</mapper>
