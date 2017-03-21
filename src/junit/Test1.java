@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 
 import pojo.Product;
+import pojo.User;
 
 public class Test1 {
 	
@@ -67,6 +68,80 @@ public class Test1 {
 			product.setCat_id(4);
 			//第一个参数为namespace+"."+id
 			sqlSession.insert("org.mybatis.test.ProductMapper.addProduct", product);
+			System.out.println("商品id是：" + product.getId());
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			if(sqlSession!=null){
+				sqlSession.close();
+			}
+		}
+	}
+	
+	@Test
+	public void deleteProduct(){
+		SqlSession sqlSession = null;
+		try {
+			InputStream inputStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+			SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+			sqlSession = sqlSessionFactory.openSession();
+			//第一个参数为namespace+"."+id
+			sqlSession.delete("org.mybatis.test.ProductMapper.deleteProduct", 25);
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			if(sqlSession!=null){
+				sqlSession.close();
+			}
+		}
+	}
+	
+	@Test
+	public void modifyProduct(){
+		SqlSession sqlSession = null;
+		try {
+			InputStream inputStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+			SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+			sqlSession = sqlSessionFactory.openSession();
+			Product product = new Product();
+			product.setId(23);
+			product.setName("岑小黄");
+			product.setDescription("岑小黄");
+			product.setPrice(99.99f);
+			product.setProduction_date(new Date());
+			product.setCat_id(3);
+			//第一个参数为namespace+"."+id
+			sqlSession.update("org.mybatis.test.ProductMapper.modifyProduct", product);
+			System.out.println(product.toString());
+			sqlSession.commit();
+		} catch (Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+		}finally{
+			if(sqlSession!=null){
+				sqlSession.close();
+			}
+		}
+	}
+	
+	@Test
+	public void addUser(){
+		SqlSession sqlSession = null;
+		try {
+			InputStream inputStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+			SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+			sqlSession = sqlSessionFactory.openSession();
+			User user = new User();
+			user.setUsername("aaa123");
+			user.setPassword("123456");
+			user.setNick_name("花见酒");
+			//第一个参数为namespace+"."+id
+			sqlSession.insert("org.mybatis.test.UserMapper.addUser", user);
+			System.out.println(user.toString());
 			sqlSession.commit();
 		} catch (Exception e) {
 			sqlSession.rollback();
