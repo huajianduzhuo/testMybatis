@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace为mapper接口地址 -->
+<mapper namespace="com.mybatis.mapper.ProductMapper">
+	<!-- 根据id查询商品 -->
+	<!-- resultType:指定sql输出结果所映射的java类型，select指定resultType表示将单条结果映射成的java对象 -->
+	<!-- 占位符用 #{} 表示，其中的id表示输入的参数名称，如果输入参数是简单类型，#{}中的参数名称可以任意 -->
+	<select id="getProductById" parameterType="int" resultType="pojo.Product">
+		SELECT * FROM PRODUCT WHERE ID = #{id}
+	</select>
+	
+	<!-- 根据商品名称模糊查询商品，可能返回多条数据
+	resultType：指定的是单条记录所返回的java对象类型
+	${}：表示拼接的sql串，将接收的参数内容不加任何修饰拼接在sql中
+	使用${}拼接sql缺点：容易引起sql注入
+	${value}：接收输入参数内容，如果输入参数类型是简单类型，${}中只能使用value -->
+	<select id="getProductByName" parameterType="java.lang.String" resultType="pojo.Product">
+		SELECT * FROM PRODUCT WHERE NAME LIKE '%${value}%'
+	</select>
+	
+	<!-- 添加商品
+	parameterType：指定输入参数类型是pojo（包括商品信息）
+	#{}中指定pojo的属性名，接收到pojo对象的属性值，mybatis通过OGNL获取对象的属性值 -->
+	<insert id="addProduct" parameterType="pojo.Product">
+		<!-- 将插入数据的主键返回，返回到product对象中
+		SELECT LAST_INSERT_ID()：得到刚insert到数据库的记录的主键值，只适用于自增主键
+		keyProperty：将查询到的主键值设置到parameterType指定的对象的id属性
+		order：SELECT LAST_INSERT_ID()语句相对于insert语句的执行顺序，自增主键在insert之后执行
+		resultType：指定返回的主键类型
+		 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO PRODUCT(NAME,DESCRIPTION,PRICE,PRODUCTION_DATE,CAT_ID) VALUES(#{name},#{description},#{price},#{production_date},#{cat_id})
+	</insert>
+	
+	<!-- 删除商品
+	根据id删除，需要传入id -->
+	<delete id="deleteProduct" parameterType="java.lang.Integer">
+		DELETE FROM PRODUCT WHERE ID = #{id}
+	</delete>
+	
+	<!-- 根据id修改商品
+	parameterType指定product对象，包括id和更新信息。注意：id必需存在
+	#{id}：从输入product对象中获取id属性值 -->
+	<update id="modifyProduct" parameterType="pojo.Product">
+		UPDATE PRODUCT SET NAME=#{name},DESCRIPTION=#{description},PRICE=#{price},
+			PRODUCTION_DATE=#{production_date},CAT_ID=#{cat_id} WHERE ID = #{id}
+	</update>
+</mapper>

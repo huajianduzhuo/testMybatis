@@ -22,5 +22,6 @@
 	 <mappers>
 		 <mapper resource="sqlMap/Product.xml"/>
 		 <mapper resource="sqlMap/User.xml"/>
+		 <mapper resource="mapper/ProductMapper.xml"/>
 	 </mappers>
 </configuration>
