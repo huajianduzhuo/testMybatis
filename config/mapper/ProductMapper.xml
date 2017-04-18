@@ -5,6 +5,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- namespace为mapper接口地址 -->
 <mapper namespace="com.mybatis.mapper.ProductMapper">
+
+	<!-- sql片段
+	id：唯一标识
+	注意：基于单表定义sql片段，这样可重用性高
+	sql片段里不要包含where，以免同一where查询中用到多个sql片段 -->
+	<sql id="query_product_where">
+		<if test="name!=null and name!=''">
+			and NAME LIKE '%${name}%'
+		</if>
+		<if test="price!=null and price>0">
+			and price > #{price}
+		</if>
+	</sql>
+
 	<!-- 根据id查询商品 -->
 	<!-- resultType:指定sql输出结果所映射的java类型，select指定resultType表示将单条结果映射成的java对象 -->
 	<!-- 占位符用 #{} 表示，其中的id表示输入的参数名称，如果输入参数是简单类型，#{}中的参数名称可以任意 -->
@@ -21,12 +35,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM PRODUCT
 		<!-- where标签自动去掉第一个and -->
 		<where>
-			<if test="name!=null and name!=''">
-				and NAME LIKE '%${name}%'
-			</if>
-			<if test="price!=null and price>0">
-				and price > #{price}
-			</if>
+			<!-- 引用sql片段，如果引用的sql片段不在本mapper文件中，id前面需要加namespace -->
+			<include refid="query_product_where"></include>
 		</where>
 	</select>
 	
