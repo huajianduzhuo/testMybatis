@@ -17,8 +17,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	${}：表示拼接的sql串，将接收的参数内容不加任何修饰拼接在sql中
 	使用${}拼接sql缺点：容易引起sql注入
 	${value}：接收输入参数内容，如果输入参数类型是简单类型，${}中只能使用value -->
-	<select id="getProductByName" parameterType="java.lang.String" resultType="pojo.Product">
-		SELECT * FROM PRODUCT WHERE NAME LIKE '%${value}%'
+	<select id="getProductByName" parameterType="product" resultType="product">
+		SELECT * FROM PRODUCT
+		<!-- where标签自动去掉第一个and -->
+		<where>
+			<if test="name!=null and name!=''">
+				and NAME LIKE '%${name}%'
+			</if>
+			<if test="price!=null and price>0">
+				and price > #{price}
+			</if>
+		</where>
 	</select>
 	
 	<!-- 添加商品

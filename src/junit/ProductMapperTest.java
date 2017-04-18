@@ -29,7 +29,9 @@ public class ProductMapperTest {
 		ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
 		List<Product> list = null;
 		try {
-			list = productMapper.getProductByName("岑");
+			Product product = new Product();
+			product.setPrice(1000.00f);
+			list = productMapper.getProductByName(product);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
