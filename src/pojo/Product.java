@@ -12,6 +12,8 @@ public class Product implements Serializable {
 	private Float price;
 	private Date production_date;
 	private Integer cat_id;
+	private Category category;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -47,6 +49,13 @@ public class Product implements Serializable {
 	}
 	public void setCat_id(Integer cat_id) {
 		this.cat_id = cat_id;
+	}
+	
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 	@Override
 	public String toString() {

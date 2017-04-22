@@ -6,16 +6,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- namespace为mapper接口地址 -->
 <mapper namespace="com.mybatis.mapper.ProductMapper">
 
+	<resultMap type="product" id="product_cate_map">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="description" property="description"/>
+		<result column="price" property="price"/>
+		<result column="production_date" property="production_date"/>
+		<result column="cat_id" property="cat_id"/>
+		
+		<association property="category" javaType="category">
+			<!-- id：关联查询的唯一标识
+			column：指定唯一标识信息的列
+			javaType：映射到category的属性 -->
+			<id column="cat_id" property="id"/>
+			<result column="cat_name" property="name"/>
+		</association>
+	</resultMap>
+
 	<!-- sql片段
 	id：唯一标识
 	注意：基于单表定义sql片段，这样可重用性高
 	sql片段里不要包含where，以免同一where查询中用到多个sql片段 -->
 	<sql id="query_product_where">
 		<if test="name!=null and name!=''">
-			and NAME LIKE '%${name}%'
+			and p.NAME LIKE '%${name}%'
 		</if>
 		<if test="price!=null and price>0">
-			and price > #{price}
+			and p.price > #{price}
 		</if>
 	</sql>
 
@@ -31,13 +48,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	${}：表示拼接的sql串，将接收的参数内容不加任何修饰拼接在sql中
 	使用${}拼接sql缺点：容易引起sql注入
 	${value}：接收输入参数内容，如果输入参数类型是简单类型，${}中只能使用value -->
-	<select id="getProductByName" parameterType="product" resultType="product">
-		SELECT * FROM PRODUCT
+	<select id="getProductByName" parameterType="product" resultMap="product_cate_map">
+		SELECT p.*, c.name cat_name FROM PRODUCT p, CATEGORY c where p.cat_id = c.id 
 		<!-- where标签自动去掉第一个and -->
-		<where>
 			<!-- 引用sql片段，如果引用的sql片段不在本mapper文件中，id前面需要加namespace -->
 			<include refid="query_product_where"></include>
-		</where>
 	</select>
 	
 	<!-- 添加商品
