@@ -74,6 +74,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		LEFT JOIN picture ON product.id=picture.product_id		
 	</select>
 	
+	<!-- 延迟加载resultMap -->
+	<resultMap type="product" id="product_lazyLoading_category">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="description" property="description"/>
+		<result column="price" property="price"/>
+		<result column="production_date" property="production_date"/>
+		<result column="cat_id" property="cat_id"/>
+		
+		<!-- 延迟加载，在resultMap中使用association或者collection -->
+		<association property="category" javaType="category" 
+			select="com.mybatis.mapper.CategoryMapper.getCategoryById" column="cat_id">
+		</association>
+	</resultMap>
+	<!-- 延迟加载 -->
+	<select id="getProductCateLazyLoading" resultMap="product_lazyLoading_category">
+		SELECT * FROM PRODUCT
+	</select>
+	
 	<!-- 添加商品
 	parameterType：指定输入参数类型是pojo（包括商品信息）
 	#{}中指定pojo的属性名，接收到pojo对象的属性值，mybatis通过OGNL获取对象的属性值 -->

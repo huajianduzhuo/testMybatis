@@ -10,6 +10,14 @@
 		<property name="" value=""/> -->
 	</properties>
 	
+	<!-- 全局配置参数，需要时再设置 -->
+	<settings>
+		<!-- 打开延迟加载的开关 -->
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<!-- 将积极加载改为消极加载，即按需加载 -->
+		<setting name="aggressiveLazyLoading" value="false"/>
+	</settings>
+	
 	<!-- 别名 -->
 	<typeAliases>
 		<!-- 单个别名定义
@@ -36,5 +44,6 @@
 		 <mapper resource="sqlMap/Product.xml"/>
 		 <mapper resource="sqlMap/User.xml"/>
 		 <mapper resource="mapper/ProductMapper.xml"/>
+		 <mapper resource="mapper/CategoryMapper.xml"/>
 	 </mappers>
 </configuration>

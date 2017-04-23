@@ -12,5 +12,6 @@ public interface ProductMapper {
 	public void deleteProduct(Integer id) throws Exception;
 	public void modifyProduct(Product product) throws Exception;
 	public List<Product> getProductAndPicture() throws Exception;
+	public List<Product> getProductCateLazyLoading() throws Exception;
 
 }

@@ -10,6 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
+import pojo.Category;
 import pojo.Product;
 
 import com.mybatis.mapper.ProductMapper;
@@ -46,6 +47,25 @@ public class ProductMapperTest {
 		List<Product> list = null;
 		try {
 			list = productMapper.getProductAndPicture();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(list);
+		sqlSession.close();
+	}
+	
+	@Test
+	public void getProductCateLazyLoading() {
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
+		List<Product> list = null;
+		try {
+			list = productMapper.getProductCateLazyLoading();
+			System.out.println("-------------------------------------------");
+			for(Product product : list){
+				Category category = product.getCategory();
+				System.out.println(category.getName());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
