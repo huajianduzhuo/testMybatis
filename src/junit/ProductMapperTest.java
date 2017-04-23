@@ -38,5 +38,19 @@ public class ProductMapperTest {
 		System.out.println(list);
 		sqlSession.close();
 	}
+	
+	@Test
+	public void getProductAndPicture() {
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		ProductMapper productMapper = sqlSession.getMapper(ProductMapper.class);
+		List<Product> list = null;
+		try {
+			list = productMapper.getProductAndPicture();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(list);
+		sqlSession.close();
+	}
 
 }

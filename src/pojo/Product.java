@@ -2,6 +2,7 @@ package pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class Product implements Serializable {
 	
@@ -13,6 +14,7 @@ public class Product implements Serializable {
 	private Date production_date;
 	private Integer cat_id;
 	private Category category;
+	private List<Picture> pictures;
 	
 	public Integer getId() {
 		return id;
@@ -56,6 +58,13 @@ public class Product implements Serializable {
 	}
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+	
+	public List<Picture> getPictures() {
+		return pictures;
+	}
+	public void setPictures(List<Picture> pictures) {
+		this.pictures = pictures;
 	}
 	@Override
 	public String toString() {

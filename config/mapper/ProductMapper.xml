@@ -22,6 +22,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<result column="cat_name" property="name"/>
 		</association>
 	</resultMap>
+	
+	<resultMap type="product" id="product_pic_map" extends="product_cate_map">
+		<collection property="pictures" ofType="picture">
+			<id column="pic_id" property="id"/>
+			<result column="product_id" property="productId"/>
+			<result column="pic_path" property="picPath"/>
+			<result column="pic_name" property="picName"/>
+			<result column="pic_order" property="picOrder"/>
+		</collection>
+	</resultMap>
 
 	<!-- sql片段
 	id：唯一标识
@@ -53,6 +63,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<!-- where标签自动去掉第一个and -->
 			<!-- 引用sql片段，如果引用的sql片段不在本mapper文件中，id前面需要加namespace -->
 			<include refid="query_product_where"></include>
+	</select>
+	
+	<!-- 一对多关联查询商品及商品图片 -->
+	<select id="getProductAndPicture" resultMap="product_pic_map">
+		SELECT product.*,category.`name` cat_name, picture.id pic_id, picture.pic_name,
+		picture.pic_order,picture.pic_path,picture.product_id 
+		FROM product 
+		LEFT JOIN category ON product.cat_id=category.id 
+		LEFT JOIN picture ON product.id=picture.product_id		
 	</select>
 	
 	<!-- 添加商品

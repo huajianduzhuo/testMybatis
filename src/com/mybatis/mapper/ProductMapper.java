@@ -11,5 +11,6 @@ public interface ProductMapper {
 	public void addProduct(Product product) throws Exception;
 	public void deleteProduct(Integer id) throws Exception;
 	public void modifyProduct(Product product) throws Exception;
+	public List<Product> getProductAndPicture() throws Exception;
 
 }
